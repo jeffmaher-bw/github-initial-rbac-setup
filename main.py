@@ -32,8 +32,8 @@ def main():
     # "x" = member, "o" = maintainer, empty = not on that team.
     with open(CSV_FILE, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        rows = list(reader)
-        fieldnames = reader.fieldnames or []
+        rows = [{k.strip(): v.strip() for k, v in row.items() if k is not None} for row in reader]
+        fieldnames = [f.strip() for f in (reader.fieldnames or [])]
 
     group_columns = [col for col in fieldnames if col not in ("Person", "Emails")]
 
