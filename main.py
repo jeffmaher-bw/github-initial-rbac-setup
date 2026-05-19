@@ -100,6 +100,7 @@ def main():
             sys.exit("Error: GITHUB_TOKEN environment variable is not set")
 
         g = Github(token)
+        current_user = g.get_user()
         org = g.get_organization(ORG_NAME)
 
         # Fetch all existing org teams once so we can match without repeated API calls.
@@ -118,6 +119,7 @@ def main():
                 print(f"  [exists]  {col}")
             else:
                 team = org.create_team(col, privacy="closed")
+                team.remove_membership(current_user)
                 existing_by_slug[team.slug] = team
                 teams[col] = team
                 print(f"  [created] {col}")
